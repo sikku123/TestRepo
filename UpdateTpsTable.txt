@@ -1,0 +1,39 @@
+CREATE  PROCEDURE `UpdateTpsTables`(IN toDate date)
+begin
+
+ 
+
+
+SET @q2=concat(" update RPT_MCA_VMS_MESSAGE_TPS set AVG_10MAX_HOUR_HITS =(select sum(B.Hits)/10 Hits  from  (select  CDR_DATE ddate,HOUR hr,SERVICE_TYPE ServiceType,NUMBER_OF_HITS Hits from RPT_MCA_VMS_MESSAGE_TPS  where CDR_DATE=date_add('",toDate,"',interval -1 day) AND SERVICE_TYPE=1 group by  ddate,hr,ServiceType order by Hits desc limit 10) B group by B.ddate,B.ServiceType) where CDR_DATE=  date_add('",toDate,"',interval -1 day) and SERVICE_TYPE=1; ");
+
+select @q2;
+                PREPARE s1 FROM @q2;
+                EXECUTE s1;
+                DEALLOCATE PREPARE s1;
+
+SET @q3=concat("update RPT_MCA_VMS_MESSAGE_TPS set AVG_10MAX_HOUR_HITS =(select sum(B.Hits)/10 Hits  from  (select  CDR_DATE ddate,HOUR hr,SERVICE_TYPE,NUMBER_OF_HITS Hits from RPT_MCA_VMS_MESSAGE_TPS  where CDR_DATE=date_add('",toDate,"',interval -1 day) AND SERVICE_TYPE=2 group by  CDR_DATE,hr,SERVICE_TYPE order by Hits desc limit 10) B group by B.ddate,B.SERVICE_TYPE) where CDR_DATE=date_add('",toDate,"',interval -1 day) and SERVICE_TYPE=2 ");
+
+select @q3;
+                PREPARE s1 FROM @q3;
+                EXECUTE s1;
+                DEALLOCATE PREPARE s1;
+
+                
+
+SET @q6=concat("update RPT_MCA_VMS_IVR_TPS set AVG_10MAX_HOUR_HITS =(select sum(B.Hits)/10 Hits  from  (select  CDR_DATE ddate,HOUR hr,SERVICE_TYPE,NUMBER_OF_HITS Hits from RPT_MCA_VMS_IVR_TPS  where CDR_DATE=date_add('",toDate,"',interval -1 day) AND SERVICE_TYPE=23 group by  CDR_DATE,hr,SERVICE_TYPE order by Hits desc limit 10) B group by B.ddate,B.SERVICE_TYPE) where CDR_DATE=date_add('",toDate,"',interval -1 day) and SERVICE_TYPE=23 ");
+
+select @q6;
+                PREPARE s1 FROM @q6;
+                EXECUTE s1;
+                DEALLOCATE PREPARE s1;
+
+
+SET @q7=concat("update RPT_MCA_VMS_IVR_TPS set AVG_10MAX_HOUR_HITS =(select sum(B.Hits)/10 Hits  from  (select  CDR_DATE ddate,HOUR hr,SERVICE_TYPE,NUMBER_OF_HITS Hits from RPT_MCA_VMS_IVR_TPS  where CDR_DATE=date_add('",toDate,"',interval -1 day) AND SERVICE_TYPE=24 group by  CDR_DATE,hr,SERVICE_TYPE order by Hits desc limit 10) B group by B.ddate,B.SERVICE_TYPE) where CDR_DATE=date_add('",toDate,"',interval -1 day) and SERVICE_TYPE=24");
+
+select @q7;
+                PREPARE s1 FROM @q7;
+                EXECUTE s1;
+                DEALLOCATE PREPARE s1;
+
+
+end
